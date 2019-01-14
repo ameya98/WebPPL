@@ -1,0 +1,32 @@
+body {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-size: 1em;
+    text-align: center;
+}
+
+#heading {
+    font-size: 3em;
+}
+
+#subheading {
+    font-size: 1.5em;
+    color: darkgrey;
+}
+
+#reset {
+    text-align: center;
+    border: 2px solid gray;
+    border-radius: 5px;
+    margin-left: 47%;
+    margin-right: 47%;
+}
+
+#reset:hover {
+    background-color: #d2f8d2;
+}
+
+#source {
+    position: fixed;
+    bottom: 1%;
+    right: 1%;
+}
