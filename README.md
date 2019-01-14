@@ -13,6 +13,9 @@ In our example, when attempting to learn *y = -2x + 20*, we get the following de
 
 The peaks near *m = -2* and *c = 20* are clear.
 
+## Generative Art
+Create procedural trees with d3.js and WebPPL [here](https://ameya98.github.io/WebPPL/generative_art/)! Trees branch off randomly, and branches terminate once thin enough.
+
 ## References
 * [Probabilistic Models of Cognition](https://probmods.org/)  
 * [Modeling Agents with Probabilistic Programs](https://agentmodels.org/)  
