@@ -4,9 +4,9 @@ $(document).ready(function(){
     
     let svg = d3.select("#svgdiv")
         .append("svg")
-        .attr("width", full_width/2)
-        .attr("height", full_height/2);
-        
+        .attr("width", 3*full_width/4)
+        .attr("height", 3*full_height/4);
+
     start_tree();
 });
 

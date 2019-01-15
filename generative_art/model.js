@@ -2,32 +2,22 @@ let svg = d3.select("svg");
 let box_width = svg.attr("width");
 let box_height = svg.attr("height");
 
-let draw_line = function(x1, y1, x2, y2, width, opacity, colour){
+globalStore.curr_line = 0;
+let draw_line = function (x1, y1, x2, y2, width, colour) {
     svg.append("line")
+        .attr("class", "tree")
         .attr("x1", x1)
         .attr("y1", y1)
         .attr("x2", x2)
         .attr("y2", y2)
         .style("stroke", colour)
-        .style("stroke-opacity", opacity)
-        .style("stroke-width", width);       
-}
+        .style("stroke-width", width)
+        .style("stroke-opacity", 0)
+        .transition()
+        .delay(20 * globalStore.curr_line)
+        .style("stroke-opacity", 1);
 
-let draw_random_lines = function(box_x, box_y, n){
-    if (n <= 0){
-        return;
-    }
-
-    let x1 = uniform(box_x, box_x + box_width);
-    let y1 = uniform(box_y, box_y + box_height);
-    let x2 = uniform(box_x, box_x + box_width);
-    let y2 = uniform(box_y, box_y + box_height);
-    let width = uniform(1, 10);
-    let opacity = uniform(0.4, 1);
-    let colour = uniformDraw(["red", "black", "green", "blue", "yellow", "orange", "brown"]);
-    draw_line(x1, y1, x2, y2, width, opacity, colour);
-
-    draw_random_lines(box_x, box_y, n - 1);
+    globalStore.curr_line += 1;
 }
 
 let draw_tree = function(box_x, box_y){
@@ -39,7 +29,7 @@ let draw_tree = function(box_x, box_y){
     let root_end_x = root_start_x;
     let root_end_y = root_start_y - root_length;
 
-    draw_line(root_start_x, root_start_y, root_end_x, root_end_y, root_width, 1, "brown");
+    draw_line(root_start_x, root_start_y, root_end_x, root_end_y, root_width, "brown");
     draw_branch(root_end_x, root_end_y, root_length, Math.PI/2, root_width);
 }
 
@@ -50,7 +40,7 @@ let draw_branch = function(start_x, start_y, prev_length, prev_angle, prev_width
     let end_x = start_x + length * Math.cos(angle);
     let end_y = start_y - length * Math.sin(angle);
 
-    draw_line(start_x, start_y, end_x, end_y, width, 1, "brown");
+    draw_line(start_x, start_y, end_x, end_y, width, "brown");
 
     if(width < 1){
         draw_leaves(end_x, end_y, angle);
@@ -81,7 +71,7 @@ let draw_leaves_helper = function(start_x, start_y, start_angle, num_leaves, cur
     let end_x = start_x + length * Math.cos(angle);
     let end_y = start_y - length * Math.sin(angle);
 
-    draw_line(start_x, start_y, end_x, end_y, 0.8, 1, "green");
+    draw_line(start_x, start_y, end_x, end_y, 0.8, "green");
     draw_leaves_helper(start_x, start_y, start_angle, num_leaves, curr_leaf + 1);
 }
 
