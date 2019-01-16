@@ -16,6 +16,10 @@ The peaks near *m = -2* and *c = 20* are clear.
 ## Generative Art
 Create procedural trees with d3.js and WebPPL [here](https://ameya98.github.io/WebPPL/generative_art/)! Trees branch off randomly, and branches terminate once thin enough. All graphics are SVG elements, so tools like [svg-grabber](https://chrome.google.com/webstore/detail/svg-grabber-get-all-the-s/ndakggdliegnegeclmfgodmgemdokdmg) can be used to save your favorite trees.
 
+<p align="center"> 
+    <img src="https://github.com/ameya98/WebPPL/blob/master/regression/tree.svg" alt="a tree in d3">
+</p>
+
 ## References
 * [Probabilistic Models of Cognition](https://probmods.org/)  
 * [Modeling Agents with Probabilistic Programs](https://agentmodels.org/)  
