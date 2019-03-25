@@ -3,6 +3,104 @@ let box_width = svg.attr("width");
 let box_height = svg.attr("height");
 
 globalStore.curr_line = 0;
+globalStore.statement = SLS.axiom;
+
+// Updates globalStore.statement by applying the L-system rules once over it.
+let make_next_statement = function () {
+    let char_choices = map(SLS_apply_helper, globalStore.statement);
+    let char_array = map(get_sample, char_choices);
+    globalStore.statement = reduce(function (curr, next) { return curr + next; }, "", char_array);
+}
+
+// WebPPL won't allow JS functions directly as an argument to map().
+let SLS_apply_helper = function (ch) {
+    return SLS.apply(ch);
+}
+
+// Returns a choice from choice, uniformly picked.
+let get_sample = function (choices) {
+    return categorical({ vs: choices });
+}
+
+// Performs an action based on the character passed.
+let perform_action = function(index, pos, angle, length, width, restore_params){
+     
+    let ch = globalStore.statement.charAt(index);
+    if(ch == 'F'){
+        // New position, as we move forward.
+        let new_x = pos[0] + length * Math.cos(angle);
+        let new_y = pos[1] + length * Math.sin(angle);
+        let new_pos = [new_x, new_y];
+        let new_length = length * uniform(0.9, 1);
+        let new_width = width * uniform(0.9, 1);
+
+        // Draw forward.
+        draw_line(pos[0], pos[1], new_pos[0], new_pos[1], width, "brown");
+
+        // Go to the next character.
+        if(index < globalStore.statement.length - 1){
+            perform_action(index + 1, new_pos, angle, new_length, new_width, restore_params);
+        }
+
+        return;
+    } 
+
+    if (ch == 'X') {
+        // No action for X.
+        if (index < globalStore.statement.length - 1) {
+            perform_action(index + 1, pos, angle, length, width, restore_params);
+        }
+        return;
+    } 
+
+    if (ch == '['){
+        // Save current parameters.
+        if (index < globalStore.statement.length - 1) {
+            let new_restore_params = [pos, angle, length, width];
+            perform_action(index + 1, pos, angle, length, width, new_restore_params);
+        }
+        return;
+    }
+
+    if (ch == ']'){
+        // Restore old parameters.
+        if (index < globalStore.statement.length - 1) {
+            let [pos, angle, length, width] = restore_params; 
+            perform_action(index + 1, pos, angle, length, width, restore_params);
+        }
+        return;
+    }
+
+    if (ch == '+') {
+        // Turn right by a random angle in the range 0 to pi/6.
+        if (index < globalStore.statement.length - 1) {
+            let new_angle = angle - uniform(0, Math.PI/6);
+            perform_action(index + 1, pos, new_angle, length, width, restore_params);
+        }
+        return;
+    } 
+
+    if (ch == '-') {
+        // Turn left by a random angle in the range 0 to pi/6.
+        if (index < globalStore.statement.length - 1) {
+            let new_angle = angle + uniform(0, Math.PI / 6);
+            perform_action(index + 1, pos, new_angle, length, width, restore_params);
+        }
+
+        return;
+    } 
+}
+
+// Draw the tree recursively using globalStore.statement as a guide.
+let draw_tree = function(){
+    let start_pos = [box_width / 2, 3 * box_height / 4];
+    let start_angle = -Math.PI / 2;
+    let start_length = uniform(10, 20);
+    let start_width = 8;
+    perform_action(0, start_pos, start_angle, start_length, start_width, []);
+}
+
+// Draw a line from position (x1, y1) to (x2, y2) with the given parameters.
 let draw_line = function (x1, y1, x2, y2, width, colour) {
     svg.append("line")
         .attr("class", "tree")
@@ -20,9 +118,19 @@ let draw_line = function (x1, y1, x2, y2, width, colour) {
     globalStore.curr_line += 1;
 }
 
-let draw_tree = function(box_x, box_y){
-    let root_start_x = box_x + box_width/2;
-    let root_start_y = box_y + 3 * box_height/4;
+make_next_statement();
+make_next_statement();
+make_next_statement();
+make_next_statement();
+make_next_statement();
+
+draw_tree();
+
+/*
+// Draw the entire tree recursively.
+let draw_tree = function(){
+    let root_start_x = box_width/2;
+    let root_start_y = 3 * box_height/4;
 
     let root_length = uniform(10, 20);
     let root_width = 8;
@@ -33,6 +141,7 @@ let draw_tree = function(box_x, box_y){
     draw_branch(root_end_x, root_end_y, root_length, Math.PI/2, root_width);
 }
 
+// Draw each branch recursively.
 let draw_branch = function(start_x, start_y, prev_length, prev_angle, prev_width){
     let length = prev_length * uniform(0.9, 1);
     let width = prev_width * uniform(0.9, 1);
@@ -80,4 +189,5 @@ let draw_leaves_helper = function(start_x, start_y, start_angle, num_leaves, cur
     draw_leaves_helper(start_x, start_y, start_angle, num_leaves, curr_leaf + 1);
 }
 
-draw_tree(0, 0);
+draw_tree();
+*/
