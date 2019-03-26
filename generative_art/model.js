@@ -11,7 +11,7 @@ let depth = 4;
 // Tree parameters.
 let start_width = 6;
 let start_length = 15;
-let start_pos = [box_width / 2, 3 * box_height / 4];
+let start_pos = [box_width / 2, 4 * box_height / 5];
 let start_angle = -Math.PI / 2;
 
 // Updates globalStore.statement by applying the L-system rules once over it.

@@ -37,11 +37,11 @@ let SLS = {
     rules: [
         ruleF = {
             init: "F",
-            final: ["FF"],
+            final: ["FF", "FF", "FF", "FF"],
         },
         ruleX = {
             init: "X",
-            final: ["F+[[XS]-XS]--F[-FXS]+XS"],
+            final: ["F+[[XS]-XS]--F[-FXS]+XS", "F+[[XXS]-XS]--F[-FXX]+XS"],
         }, 
         ruleS = {
             init: "S",
