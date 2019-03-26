@@ -192,7 +192,7 @@ let draw_branch = function(start_x, start_y, prev_length, prev_angle, prev_width
     if(width < 1){
         draw_leaves(end_x, end_y, angle);
     } else {
-        if (width >= 1 && width < 1.1) {
+        if (width >= 1 && width < 1.05) {
             draw_branch(end_x, end_y, length, angle, width);
             draw_branch(end_x, end_y, length, angle, width);
         } else {
@@ -208,7 +208,7 @@ let draw_branch = function(start_x, start_y, prev_length, prev_angle, prev_width
 }
 
 let draw_leaves = function(start_x, start_y, start_angle){
-    let num_leaves = 4 + randomInteger(5);
+    let num_leaves = 4 + randomInteger(3);
     draw_leaves_helper(start_x, start_y, start_angle, num_leaves, 0);
 }
 
