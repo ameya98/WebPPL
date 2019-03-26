@@ -1,6 +1,6 @@
 /*
     Loads the WebPPL code from model.js and runs it.
-    Run the entire application on a server (eg. http-server/live-server).
+    Run the entire application on a server (eg. Node's http-server/live-server).
     Remember to clear browser cache to see changes!
 */
 
@@ -33,24 +33,34 @@ function start_tree(){
 
 /* Stochastic L-System. */
 let SLS = {
-    axiom: "XF",
+    axiom: "X",
     rules: [
         ruleF = {
             init: "F",
-            final: ["F", "FF"],
+            final: ["FF"],
         },
         ruleX = {
             init: "X",
-            final: ["X", "F+[[X]-X]-F[-FX]+X"],
+            final: ["F+[[XS]-XS]--F[-FXS]+XS"],
+        }, 
+        ruleS = {
+            init: "S",
+            final: ["[F[++L][+L][L][-L][--L]]", "[F[+L][L][-L]]", "[F[+++L][++L][+L][L][-L][--L][--L]]"],
         },
+        ruleL = {
+            init: "L",
+            final: ["L", "L[+L][-L]", "L[++L][+L][-L][--L]", "LL"],
+        }
     ],
 
     apply: function(ch){
+        // Try to find a match with one of the rules.
         for (rule of this.rules){
             if(ch == rule.init){
                 return rule.final;
             }
         }
+        // No match found.
         return [ch];
     }
 }
