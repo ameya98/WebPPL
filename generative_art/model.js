@@ -110,18 +110,18 @@ let perform_action = function(index, pos, angle, length, width){
     }
 
     if (ch == '+') {
-        // Turn right by a random angle in the range 0 to pi/6.
+        // Turn right by a random angle.
         if (index < globalStore.statement.length - 1) {
-            let new_angle = angle + uniform(Math.PI/8, Math.PI/7);
+            let new_angle = angle + uniform(Math.PI/20, Math.PI/7);
             return perform_action(index + 1, pos, new_angle, length, width);
         }
         return;
     } 
 
     if (ch == '-') {
-        // Turn left by a random angle in the range 0 to pi/6.
+        // Turn left by a random angle.
         if (index < globalStore.statement.length - 1) {
-            let new_angle = angle - uniform(Math.PI/8, Math.PI/7);
+            let new_angle = angle - uniform(Math.PI/20, Math.PI/7);
             return perform_action(index + 1, pos, new_angle, length, width);
         }
         return;

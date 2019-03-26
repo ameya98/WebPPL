@@ -37,7 +37,7 @@ let SLS = {
     rules: [
         ruleF = {
             init: "F",
-            final: ["FF", "FF", "FF", "FF"],
+            final: ["FF"],
         },
         ruleX = {
             init: "X",
