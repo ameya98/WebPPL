@@ -6,7 +6,7 @@ globalStore.curr_line = 0;
 globalStore.statement = SLS.axiom;
 
 // Till what depth to apply L-system rules.
-let depth = 4;
+let depth = 5;
 
 // Tree parameters.
 let start_width = 6;
@@ -45,8 +45,8 @@ let perform_action = function(index, pos, angle, length, width){
             // Draw the branch.
             draw_line(pos[0], pos[1], new_pos[0], new_pos[1], width, "brown");
 
-            let new_length = (width > 0.7 * start_width) ? length : length * uniform(0.95, 1);
-            let new_width = (width < 0.3 * start_width) ? width : width * uniform(0.9, 1);
+            let new_length = (width > 0.5 * start_width) ? length : length * uniform(0.9, 1);
+            let new_width = (width < 0.2 * start_width) ? width : width * uniform(0.8, 1);
 
             // Go to the next character.
             if(index < globalStore.statement.length - 1){
@@ -66,7 +66,7 @@ let perform_action = function(index, pos, angle, length, width){
         let new_pos = [new_x, new_y];
     
         // Draw the leaf.
-        draw_line(pos[0], pos[1], new_pos[0], new_pos[1], width/2, "green");
+        draw_line(pos[0], pos[1], new_pos[0], new_pos[1], 2*width/3, "green");
 
         // Go to the next character.
         if (index < globalStore.statement.length - 1) {
