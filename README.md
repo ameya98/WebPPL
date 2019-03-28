@@ -1,4 +1,4 @@
-# WebPPL
+﻿# WebPPL
 [WebPPL](http://webppl.org) is a Probabilistic Programming Language, built over JavaScript. This repository contains gists written in WebPPL that highlight WebPPL's inference capabilities.
 
 ## Bayesian Regression
@@ -13,8 +13,11 @@ In our example, when attempting to learn *y = -2x + 20*, we get the following de
 
 The peaks near *m = -2* and *c = 20* are clear.
 
-## Stochastic L-Systems
-Create generative trees (guided by a stochastic L-system) with d3.js and WebPPL [here](https://ameya98.github.io/WebPPL/generative_art/)! All graphics are SVG elements, so tools like [svg-grabber](https://chrome.google.com/webstore/detail/svg-grabber-get-all-the-s/ndakggdliegnegeclmfgodmgemdokdmg) can be used to save your favorite trees.
+## Inference over Stochastic L-Systems
+Create generative trees (guided by a stochastic L-system) with d3.js [here](https://ameya98.github.io/WebPPL/generative_art/)! 
+Performs inference with WebPPL over the number of leaves to identify the depth. The use of WebPPL complicates the 'save' and 'restore' operations in the L-system, because all JS functions must be referentially transparent, ie, they should not alter state. This means the stack used to restore states must be implicit - see the *perform_action()* function if interested.
+
+All graphics are SVG elements, so tools like [svg-grabber](https://chrome.google.com/webstore/detail/svg-grabber-get-all-the-s/ndakggdliegnegeclmfgodmgemdokdmg) can be used to save your favorite trees.
 
 <p align="center"> 
     <img src="https://github.com/ameya98/WebPPL/blob/master/generative_art/sample.png" alt="a tree in d3">
