@@ -14,11 +14,11 @@ let start_length = 15;
 let start_pos = [box_width / 2, 4 * box_height / 5];
 let start_angle = -Math.PI / 2;
 
-// Updates globalStore.statement by applying the L-system rules once over it.
-let make_next_statement = function () {
-    let char_choices = map(SLS_apply_helper, globalStore.statement);
+// Applying the L-system rules once over a given string.
+let make_next_statement = function (str) {
+    let char_choices = map(SLS_apply_helper, str);
     let char_array = map(get_sample, char_choices);
-    globalStore.statement = reduce(function (curr, next) { return curr + next; }, "", char_array);
+    return reduce(function (curr, next) { return curr + next; }, "", char_array);
 }
 
 // WebPPL won't allow JS functions directly as an argument to map().
@@ -84,16 +84,9 @@ let perform_action = function(index, pos, angle, length, width){
         return;
     } 
 
-    if (ch == 'S') {
-        // No action for S.
-        if (index < globalStore.statement.length - 1) {
-            return perform_action(index + 1, pos, angle, length, width);
-        }
-        return;
-    } 
-
     if (ch == '['){
-        // Save current parameters.
+        // Save current parameters. 
+        // We do this by reading upto the next ']' and then continuing from there with these parameters.
         if (index < globalStore.statement.length - 1) {
             let new_index = perform_action(index + 1, pos, angle, length, width);
             return perform_action(new_index, pos, angle, length, width);
@@ -102,7 +95,7 @@ let perform_action = function(index, pos, angle, length, width){
     }
 
     if (ch == ']'){
-        // Restore old parameters.
+        // Restore old parameters, by returning from here upto the first previous '['.
         if (index < globalStore.statement.length - 1) {
             return index + 1;
         }
@@ -151,17 +144,51 @@ let draw_line = function (x1, y1, x2, y2, width, colour) {
     globalStore.curr_line += 1;
 }
 
-// Construct the statement by applying the stochastic L-system rules, until the given depth.
-let get_statement = function(depth){
+// Construct the statement by applying the stochastic L-system rules on a string, until the given depth.
+let get_statement = function(str, depth){
     if(depth == 0){
-        return;
+        return str;
     } else {
-        make_next_statement();
-        display(globalStore.statement);
-        get_statement(depth - 1);
+        get_statement(make_next_statement(str), depth - 1);
     }
 }
 
-// Construct the L-system statement and draw the tree.
-get_statement(depth);
+// Construct the L-system statement starting from the SLS axiom, and draw the tree.
+globalStore.statement = get_statement(SLS.axiom, depth);
+display(globalStore.statement);
+
 draw_tree();
+
+let actual_leaves = reduce(function (next, curr) { return (next == 'L') ? (curr + 1) : curr; }, 0, globalStore.statement);
+display(actual_leaves);
+
+// Try to estimate depth from the number of leaves, via inference.
+let model_tree_params = function () {
+
+    // Prior beliefs.
+    let depth = randomInteger(6);
+
+    // Number of leaves in a statement of this depth.
+    let statement = get_statement(SLS.axiom, depth);
+    let num_leaves = reduce(function (next, curr) { return (next == 'L') ? (curr + 1) : curr; }, 0, statement);
+
+    // Condition on actual number of leaves.
+    condition(Math.abs(num_leaves - actual_leaves) < 300);
+
+    return {
+        depth: depth,
+        num_leaves: num_leaves,
+    };
+};
+
+// Joint distribution. 
+let dist = Infer({ method: 'MCMC', samples: 1000 }, model_tree_params);
+let dist_depth = marginalize(dist, function (d) { return d.depth });
+let dist_leaves = marginalize(dist, function (d) { return d.num_leaves });
+
+display(dist_depth.MAP().val);
+display(mapN(function(val) { return Math.exp(dist_depth.score(val)); }, 10));
+display(expectation(dist_leaves));
+display(dist_leaves.MAP().val);
+
+
