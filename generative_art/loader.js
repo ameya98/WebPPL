@@ -8,30 +8,41 @@ $(document).ready(function(){
     let full_width = $(window).width();
     let full_height = $(window).height();
     
+    // Set SVG object.
     let svg = d3.select("#svgdiv")
         .append("svg")
         .attr("width", 3*full_width/4)
         .attr("height", 3*full_height/4);
 
-    console.log(SLS);
-    start_tree();
+    // Show L-system rules on page.
+    text_string = "";
+    for (rule of SLS.rules) {
+        text_string += rule.init + ' → ' + rule.final.join(', ');
+        text_string += '\n';
+    }
+
+    $('#rules').text(text_string);
+
+    // Load WebPPL model to start drawing.
+    load_model();
+
 });
 
-/* Reset the tree, and start drawing again. */
+// Reset the tree, and start drawing again. 
 $("#reset").click(function(){
     d3.select("svg").selectAll("*").remove();
     start_tree();
     console.log("Tree reset.");
 });
 
-/* Run the WebPPL model to draw the tree. */
-function start_tree(){
+// Run the WebPPL model to draw the tree.
+function load_model(){
     $.get("./model.js", function (model_string) {
         webppl.run(model_string, function (s, x) { console.log(s); }, { debug: true });
     }, 'text');
 }
 
-/* Stochastic L-System. */
+// Stochastic L-System. 
 let SLS = {
     axiom: "X",
     rules: [
@@ -60,3 +71,4 @@ let SLS = {
         return [ch];
     }
 }
+

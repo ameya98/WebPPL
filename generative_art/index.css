@@ -13,6 +13,12 @@ body {
     color: darkgrey;
 }
 
+#rules, #rulesholder {
+    font-size: 0.8em;
+    word-wrap: break-word;
+    white-space: pre-line;
+}
+
 #reset {
     text-align: center;
     border: 2px solid gray;
