@@ -173,7 +173,7 @@ let model_tree_params = function () {
     let num_leaves = reduce(function (next, curr) { return (next == 'L') ? (curr + 1) : curr; }, 0, statement);
 
     // Condition on actual number of leaves.
-    condition(Math.abs(num_leaves - actual_leaves) < 300);
+    factor(Math.exp(-Math.abs(num_leaves - actual_leaves)));
 
     return {
         depth: depth,
