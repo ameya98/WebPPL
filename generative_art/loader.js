@@ -31,7 +31,7 @@ $(document).ready(function(){
 // Reset the tree, and start drawing again. 
 $("#reset").click(function(){
     d3.select("svg").selectAll("*").remove();
-    start_tree();
+    load_model();
     console.log("Tree reset.");
 });
 
