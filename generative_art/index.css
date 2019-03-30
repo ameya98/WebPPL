@@ -1,27 +1,25 @@
 body {
     font-family: 'IBM Plex Sans Condensed', sans-serif;
-    font-size: 1em;
+    font-size: 0.8vmax;
     text-align: center;
 }
 
 #heading {
-    font-size: 2em;
+    font-size: 2vmax;
 }
 
 #subheading {
-    font-size: 1em;
+    font-size: 1vmax;
     color: darkgrey;
 }
 
 #depthdiv {
     margin-top: 0.5%;
-    font-size: 0.9em;
 }
 
 #inferreddepthdiv {
-    margin: 0.5%;
+    margin: 1%;
     margin-bottom: 1%;
-    font-size: 0.9em;
 }
 
 input[type=radio] {
@@ -61,7 +59,6 @@ label {
 }
 
 #rules, #rulesholder {
-    font-size: 0.9em;
     color: darkgrey;
     word-wrap: break-word;
     white-space: pre-line;
@@ -71,8 +68,8 @@ label {
     text-align: center;
     border: 2px solid darkgray;
     border-radius: 5px;
-    margin-left: 47%;
-    margin-right: 47%;
+    margin-left: 42%;
+    margin-right: 42%;
 }
 
 #reset:hover {
@@ -80,7 +77,6 @@ label {
 }
 
 #source {
-    position: fixed;
     bottom: 1%;
-    right: 1%;
+    right: 1%; 
 }
