@@ -1,17 +1,25 @@
+/* 
+    Trees as Stochastic Lindenmayer Systems
+    (and Inference over them!)
+
+    Author: Ameya Daigavane
+*/
+
+// globalStore variables that WebPPL will pass back when run() in loader.js exits.
+globalStore.curr_line = 0;
+globalStore.statement = SLS.axiom;
+globalStore.inferred_depth = 0;
+globalStore.actual_leaves = 0;
+
+// Graphical parameters.
 let svg = d3.select("svg");
 let box_width = svg.attr("width");
 let box_height = svg.attr("height");
 
-globalStore.curr_line = 0;
-globalStore.statement = SLS.axiom;
-
-// Till what depth to apply L-system rules.
-let depth = 5;
-
 // Tree parameters.
 let start_width = 6;
 let start_length = 15;
-let start_pos = [box_width / 2, 4 * box_height / 5];
+let start_pos = [box_width / 2, 5 * box_height / 5];
 let start_angle = -Math.PI / 2;
 
 // Performs an action based on the character passed.
@@ -170,6 +178,8 @@ let model_tree_params = function () {
 };
 
 // Execution starts here.
+display("Chosen depth: " + depth);
+
 // Construct the L-system statement starting from the SLS axiom.
 globalStore.statement = get_statement(SLS.axiom, depth);
 
@@ -178,16 +188,14 @@ globalStore.actual_leaves = reduce(function (next, curr) { return (next == 'L') 
 
 // Draw the tree with the L-systsem statement as the guide.
 draw_tree();
-
-// Distribution of depth over observerved leaves. 
-let dist = Infer({ method: 'MCMC', samples: 5000 }, model_tree_params);
-
-display(globalStore.statement);
 display(globalStore.actual_leaves);
 
+// Distribution of depth over observed leaves. 
+let dist = Infer({ method: 'MCMC', samples: 5000 }, model_tree_params);
 display(mapN(function (val) { return Math.exp(dist.score(val)); }, 7));
 display(expectation(dist));
 display(dist.MAP().val);
-
 globalStore.inferred_depth = dist.MAP().val;
+
+display("Inferred depth: " + globalStore.inferred_depth);
 

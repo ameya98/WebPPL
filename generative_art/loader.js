@@ -12,7 +12,7 @@ $(document).ready(function(){
     let svg = d3.select("#svgdiv")
         .append("svg")
         .attr("width", 3*full_width/4)
-        .attr("height", 2.7*full_height/4);
+        .attr("height", 2.2*full_height/4);
 
     // Show L-system rules on page.
     text_string = "";
@@ -22,8 +22,14 @@ $(document).ready(function(){
             text_string += '\n';
         }
     }
-
     $('#rules').text(text_string);
+
+    // Text to show when inference is going on.
+    default_inferred_string = $('#inferreddepthdiv').text();
+
+    // Reset when button clicked or depth changed.
+    $("#reset").click(reset);
+    $("input[name='radioset']").click(reset);
 
     // Load WebPPL model to start drawing.
     load_model();
@@ -31,16 +37,22 @@ $(document).ready(function(){
 });
 
 // Reset the tree, and start drawing again. 
-$("#reset").click(function(){
+function reset() {
     d3.select("svg").selectAll("*").remove();
+    $('#inferreddepthdiv').text(default_inferred_string);
     load_model();
     console.log("Tree reset.");
-});
+}
+
 
 // Run the WebPPL model to draw the tree.
 function load_model(){
+    depth = parseInt($("input[name='radioset']:checked").val(), 10);
+    
     $.get("./model.js", function (model_string) {
-        webppl.run(model_string, function (s, x) { console.log(s); }, { debug: true });
+        webppl.run(model_string, function (s, x) { 
+            $('#inferreddepthdiv').text("Inferred Depth: " + s.inferred_depth); 
+        }, { debug: true });
     }, 'text');
 }
 
@@ -86,3 +98,7 @@ let SLS = {
         return [ch];
     }
 }
+
+// Till what depth to apply L-system rules.
+let depth = 5;
+let default_inferred_string = "";

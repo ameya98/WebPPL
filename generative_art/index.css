@@ -13,8 +13,14 @@ body {
     color: darkgrey;
 }
 
-#depth {
+#depthdiv {
     margin-top: 0.5%;
+    font-size: 0.9em;
+}
+
+#inferreddepthdiv {
+    margin: 0.5%;
+    margin-bottom: 1%;
     font-size: 0.9em;
 }
 
@@ -39,7 +45,7 @@ input[type=radio]:checked::before {
     position: absolute;
     font: 13px/1 'Open Sans', sans-serif;
     left: 6px;
-    top: 4px;
+    top: 3px;
     content: '\02143';
     transform: rotate(40deg);
 }
@@ -63,7 +69,7 @@ label {
 
 #reset {
     text-align: center;
-    border: 2px solid gray;
+    border: 2px solid darkgray;
     border-radius: 5px;
     margin-left: 47%;
     margin-right: 47%;

@@ -8,20 +8,21 @@
         <link rel="stylesheet" type="text/css" href="index.css">
     </head>
     <body>
-        <div id="heading">Trees as Stochastic Lindenmayer Systems</div>
+        <div id="heading">Inference over Trees as Stochastic Lindenmayer Systems</div>
         <div id="subheading">by Ameya Daigavane</div>
-        <div id="depth">
+        <div id="depthdiv">
             Depth:
-            <label><input type="radio" name="radioset" /> 0 </label>
-            <label><input type="radio" name="radioset" /> 1 </label>
-            <label><input type="radio" name="radioset" /> 2 </label>
-            <label><input type="radio" name="radioset" /> 3 </label>
-            <label><input type="radio" name="radioset" /> 4 </label>
-            <label><input type="radio" name="radioset" /> 5 </label>
-            <label><input type="radio" name="radioset" /> 6 </label>
+            <label><input type="radio" name="radioset" value="1" /> 1 </label>
+            <label><input type="radio" name="radioset" value="2" /> 2 </label>
+            <label><input type="radio" name="radioset" value="3" /> 3 </label>
+            <label><input type="radio" name="radioset" value="4" /> 4 </label>
+            <label><input type="radio" name="radioset" value="5" checked/> 5 </label>
+            <label><input type="radio" name="radioset" value="6" /> 6 </label>
         </div>
-
         <div id="svgdiv">
+        </div>
+        <div id="inferreddepthdiv">
+            Inferred Depth: (calculating...)
         </div>
         <div id="reset">
             Reset Tree!
@@ -29,6 +30,8 @@
         <div id="rulesholder">
             L-System Productions:
             <div id="rules"></div>
+            F: Draw Ahead, L: Draw Leaf, X: No Action, [: Save State, ]: Restore State, +: Rotate Right, -: Rotate Left
+
         </div>
         <div id="source">Source on Github <a href="https://github.com/ameya98/WebPPL">here.</a></div>
         <script src="loader.js"></script>
