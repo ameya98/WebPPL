@@ -13,8 +13,50 @@ body {
     color: darkgrey;
 }
 
+#depth {
+    margin-top: 0.5%;
+    font-size: 0.9em;
+}
+
+input[type=radio] {
+    display: block;
+    margin: 8px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    background-color: #f1f1f1;
+    color: #666;
+    top: 10px;
+    height: 20px;
+    width: 20px;
+    border: 0;
+    border-radius: 40px;
+    cursor: pointer;     
+    outline: none;
+}
+input[type=radio]:checked::before {
+    position: absolute;
+    font: 13px/1 'Open Sans', sans-serif;
+    left: 6px;
+    top: 4px;
+    content: '\02143';
+    transform: rotate(40deg);
+}
+input[type=radio]:hover {
+     background-color: #f7f7f7;
+}
+input[type=radio]:checked {
+     background-color: #f1f1f1;
+}
+
+label {
+    display: inline-block;
+}
+
 #rules, #rulesholder {
-    font-size: 0.8em;
+    font-size: 0.9em;
+    color: darkgrey;
     word-wrap: break-word;
     white-space: pre-line;
 }

@@ -14,23 +14,6 @@ let start_length = 15;
 let start_pos = [box_width / 2, 4 * box_height / 5];
 let start_angle = -Math.PI / 2;
 
-// Applying the L-system rules once over a given string.
-let make_next_statement = function (str) {
-    let char_choices = map(SLS_apply_helper, str);
-    let char_array = map(get_sample, char_choices);
-    return reduce(function (curr, next) { return curr + next; }, "", char_array);
-}
-
-// WebPPL won't allow JS functions directly as an argument to map().
-let SLS_apply_helper = function (ch) {
-    return SLS.apply(ch);
-}
-
-// Returns a choice from choice, uniformly picked.
-let get_sample = function (choices) {
-    return categorical({ vs: choices });
-}
-
 // Performs an action based on the character passed.
 let perform_action = function(index, pos, angle, length, width){
      
@@ -144,6 +127,23 @@ let draw_line = function (x1, y1, x2, y2, width, colour) {
     globalStore.curr_line += 1;
 }
 
+// Applying the L-system rules once over a given string.
+let make_next_statement = function (str) {
+    let char_choices = map(SLS_apply_helper, str);
+    let char_array = map(get_sample, char_choices);
+    return reduce(function (curr, next) { return curr + next; }, "", char_array);
+}
+
+// Helper because WebPPL won't allow JS functions directly as an argument to map().
+let SLS_apply_helper = function (ch) {
+    return SLS.apply(ch);
+}
+
+// Returns a choice from choice, uniformly picked.
+let get_sample = function (choices) {
+    return categorical({ vs: choices });
+}
+
 // Construct the statement by applying the stochastic L-system rules on a string, until the given depth.
 let get_statement = function(str, depth){
     if(depth == 0){
@@ -153,42 +153,41 @@ let get_statement = function(str, depth){
     }
 }
 
-// Construct the L-system statement starting from the SLS axiom, and draw the tree.
-globalStore.statement = get_statement(SLS.axiom, depth);
-display(globalStore.statement);
-
-draw_tree();
-
-let actual_leaves = reduce(function (next, curr) { return (next == 'L') ? (curr + 1) : curr; }, 0, globalStore.statement);
-display(actual_leaves);
-
 // Try to estimate depth from the number of leaves, via inference.
 let model_tree_params = function () {
 
     // Prior beliefs.
-    let depth = randomInteger(6);
+    let depth = randomInteger(7);
 
     // Number of leaves in a statement of this depth.
-    let statement = get_statement(SLS.axiom, depth);
-    let num_leaves = reduce(function (next, curr) { return (next == 'L') ? (curr + 1) : curr; }, 0, statement);
+    // let statement = get_statement("A", depth);
+    let num_leaves = reduce(function (next, curr) { return (next == 'B') ? (curr + 1) : curr; }, 0, get_statement("A", depth));
 
     // Condition on actual number of leaves.
-    factor(Math.exp(-Math.abs(num_leaves - actual_leaves)));
+    factor(-Math.abs(num_leaves - globalStore.actual_leaves)/100);
 
-    return {
-        depth: depth,
-        num_leaves: num_leaves,
-    };
+    return depth;
 };
 
-// Joint distribution. 
-let dist = Infer({ method: 'MCMC', samples: 1000 }, model_tree_params);
-let dist_depth = marginalize(dist, function (d) { return d.depth });
-let dist_leaves = marginalize(dist, function (d) { return d.num_leaves });
+// Execution starts here.
+// Construct the L-system statement starting from the SLS axiom.
+globalStore.statement = get_statement(SLS.axiom, depth);
 
-display(dist_depth.MAP().val);
-display(mapN(function(val) { return Math.exp(dist_depth.score(val)); }, 10));
-display(expectation(dist_leaves));
-display(dist_leaves.MAP().val);
+// Compute the number of leaves.
+globalStore.actual_leaves = reduce(function (next, curr) { return (next == 'L') ? (curr + 1) : curr; }, 0, globalStore.statement);
 
+// Draw the tree with the L-systsem statement as the guide.
+draw_tree();
+
+// Distribution of depth over observerved leaves. 
+let dist = Infer({ method: 'MCMC', samples: 5000 }, model_tree_params);
+
+display(globalStore.statement);
+display(globalStore.actual_leaves);
+
+display(mapN(function (val) { return Math.exp(dist.score(val)); }, 7));
+display(expectation(dist));
+display(dist.MAP().val);
+
+globalStore.inferred_depth = dist.MAP().val;
 

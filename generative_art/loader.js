@@ -12,13 +12,15 @@ $(document).ready(function(){
     let svg = d3.select("#svgdiv")
         .append("svg")
         .attr("width", 3*full_width/4)
-        .attr("height", 3*full_height/4);
+        .attr("height", 2.7*full_height/4);
 
     // Show L-system rules on page.
     text_string = "";
     for (rule of SLS.rules) {
-        text_string += rule.init + ' → ' + rule.final.join(', ');
-        text_string += '\n';
+        if(rule.display){
+            text_string += rule.init + ' → ' + rule.final.join(', ');
+            text_string += '\n';
+        }
     }
 
     $('#rules').text(text_string);
@@ -42,22 +44,35 @@ function load_model(){
     }, 'text');
 }
 
-// Stochastic L-System. 
+// Stochastic L-System that guides the tree. 
 let SLS = {
     axiom: "X",
     rules: [
         ruleF = {
             init: "F",
             final: ["FF", "F"],
+            display: true,
         },
         ruleX = {
             init: "X",
             final: ["F+-+[[X[[L][+L][-L]]]--X[[L][++L][--L]]]-F[-F[[L][+L][-L]]]+X[[L][+L][-L]]"],
+            display: true,
         }, 
         ruleL = {
             init: "L",
             final: ["[L[++L][--L]]", "L"],
-        }
+            display: true,
+        },
+        ruleA = {
+            init: "A",
+            final: ["ABBBABBBBBBABBB"],
+            display: false,
+        },
+        ruleB = {
+            init: "B",
+            final: ["BBB", "B"],
+            display: false,
+        },
     ],
 
     apply: function(ch){
@@ -71,4 +86,3 @@ let SLS = {
         return [ch];
     }
 }
-
