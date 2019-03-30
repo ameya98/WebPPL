@@ -15,7 +15,8 @@ The peaks near *m = -2* and *c = 20* are clear.
 
 ## Inference over Stochastic L-Systems
 Create generative trees (guided by a stochastic L-system) with d3.js [here](https://ameya98.github.io/WebPPL/generative_art/)! 
-Performs inference with WebPPL over the number of leaves to identify the depth. The use of WebPPL complicates the 'save' and 'restore' operations in the L-system, because all JS functions must be referentially transparent, ie, they should not alter state. This means the stack used to restore states must be implicit - see the *perform_action()* function if interested.
+Performs inference with WebPPL over the number of leaves to identify the depth selected. The depth is the number of times the L-system rules are applied to the current string. 
+The use of WebPPL complicates the 'save' and 'restore' operations in the L-system, because all JS functions must be referentially transparent, ie, they should not alter state. This means the stack used to restore states must be implicit - see the *perform_action()* function if interested.
 
 All graphics are SVG elements, so tools like [svg-grabber](https://chrome.google.com/webstore/detail/svg-grabber-get-all-the-s/ndakggdliegnegeclmfgodmgemdokdmg) can be used to save your favorite trees.
 
