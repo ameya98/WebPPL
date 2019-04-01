@@ -1,6 +1,18 @@
 ﻿# WebPPL
 [WebPPL](http://webppl.org) is a Probabilistic Programming Language, built over JavaScript. This repository contains gists written in WebPPL that highlight WebPPL's inference capabilities.
 
+## Inference over Stochastic L-Systems
+Create generative trees guided by a stochastic L-system [here](https://ameya98.github.io/WebPPL/generative_art/)! Graphics made with the help of d3.js.
+Performs inference with WebPPL over the number of leaves to identify the depth selected. The depth is the number of times the L-system rules are applied to the current string. 
+
+The use of WebPPL complicates the 'save' and 'restore' operations in the L-system, because all JS functions must be referentially transparent, ie, they should not alter state. This means the stack used to restore states must be implicit - see the *perform_action()* function if interested.
+
+All graphics are SVG elements, so tools like [svg-grabber](https://chrome.google.com/webstore/detail/svg-grabber-get-all-the-s/ndakggdliegnegeclmfgodmgemdokdmg) can be used to save your favorite trees. Credit to [Tipue](http://www.tipue.com/blog/radio-checkbox/) for the nice radio button CSS!
+
+<p align="center"> 
+    <img src="https://github.com/ameya98/WebPPL/blob/master/generative_art/sample.png" alt="a tree in d3">
+</p>
+
 ## Bayesian Regression
 Bayesian regression allows us to estimate parameters as well as the probability density over the parameter space, conditional on training data.
 See [bayesian_regression.js](regression/bayesian_regression.js) to see how to perform Bayesian linear regression in WebPPL.  
@@ -12,18 +24,6 @@ In our example, when attempting to learn *y = -2x + 20*, we get the following de
 </p>
 
 The peaks near *m = -2* and *c = 20* are clear.
-
-## Inference over Stochastic L-Systems
-Create generative trees (guided by a stochastic L-system) with d3.js [here](https://ameya98.github.io/WebPPL/generative_art/)! 
-Performs inference with WebPPL over the number of leaves to identify the depth selected. The depth is the number of times the L-system rules are applied to the current string. 
-
-The use of WebPPL complicates the 'save' and 'restore' operations in the L-system, because all JS functions must be referentially transparent, ie, they should not alter state. This means the stack used to restore states must be implicit - see the *perform_action()* function if interested.
-
-All graphics are SVG elements, so tools like [svg-grabber](https://chrome.google.com/webstore/detail/svg-grabber-get-all-the-s/ndakggdliegnegeclmfgodmgemdokdmg) can be used to save your favorite trees. Credit to [Tipue](http://www.tipue.com/blog/radio-checkbox/) for the nice radio button CSS!
-
-<p align="center"> 
-    <img src="https://github.com/ameya98/WebPPL/blob/master/generative_art/sample.png" alt="a tree in d3">
-</p>
 
 ## References
 * [Probabilistic Models of Cognition](https://probmods.org/)  
